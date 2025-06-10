@@ -1,11 +1,17 @@
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from redis_om import get_redis_connection, HashModel
 
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
+# Load the environment variables from inventory-specific file
+env_path = Path(__file__).parent / '.env.inventory'
+load_dotenv(dotenv_path=env_path)
+
+
 app = FastAPI()
 
 app.add_middleware(
@@ -29,13 +35,8 @@ class Product(HashModel):
     price: float
     quantity: int
 
-    class Meat:
+    class Meta:
         database = redis
-
-
-@app.get('/products')
-def all():
-    return [format(pk) for pk in Product.all_pks()]
 
 
 def format(pk: str):
@@ -47,6 +48,11 @@ def format(pk: str):
         'price': product.price,
         'quantity': product.quantity
     }
+
+
+@app.get('/products')
+def all():
+    return [format(pk) for pk in Product.all_pks()]
 
 
 @app.post('/products')
