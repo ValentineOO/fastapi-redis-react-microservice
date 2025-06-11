@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Wrapper } from "./Wrapper";
+import { Link } from "react-router-dom";
 
 export const Products = () => {
   const [products, setProducts] = useState([]);
@@ -12,8 +13,23 @@ export const Products = () => {
     })();
   }, []);
 
+  const del = async (id) => {
+    if (window.confirm("Are you sure you want to delete this record? ")) {
+      await fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
+        method: "DELETE",
+      });
+      setProducts(products.filter((p) => p.id !== id));
+    }
+  };
+
   return (
     <Wrapper>
+      <div className="pt-3 pb-2 mb-3 border-bottom">
+        <Link to={`/create`} className="btn btn-sm btn-outline-secondary">
+          Add{" "}
+        </Link>
+      </div>
+
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -38,6 +54,7 @@ export const Products = () => {
                     <button
                       href="#"
                       className="btn btn-sm btn-outline-secondary"
+                      onClick={(e) => del(product.id)}
                     >
                       Delete
                     </button>
