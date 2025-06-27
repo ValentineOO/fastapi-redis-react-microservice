@@ -1,6 +1,6 @@
 # FastAPI Redis React Microservice
 
-[![Quality Gate Status](http://localhost:9000/api/project_badges/measure?project=fastapi-redis-react-microservice&metric=alert_status&token=sqb_5633453e0c5c1a40c877a7582613e49d556bb926)](http://localhost:9000/dashboard?id=fastapi-redis-react-microservice) ![Python](https://img.shields.io/badge/python-3.8+-blue?logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115.12-green?logo=fastapi&logoColor=white) ![React](https://img.shields.io/badge/React-18+-blue?logo=react&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-5.3+-red?logo=redis&logoColor=white)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ValentineOO_fastapi-redis-react-microservice&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ValentineOO_fastapi-redis-react-microservice) ![Python](https://img.shields.io/badge/python-3.8+-blue?logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115.12-green?logo=fastapi&logoColor=white) ![React](https://img.shields.io/badge/React-18+-blue?logo=react&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-5.3+-red?logo=redis&logoColor=white)
 
 A modern microservices-based e-commerce application demonstrating event-driven architecture with FastAPI, Redis, and React. This project showcases real-world patterns including asynchronous message processing, inventory management, and inter-service communication.
 
