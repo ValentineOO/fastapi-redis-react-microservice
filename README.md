@@ -1,93 +1,290 @@
-# fastapi-redis-react-microservice
+# FastAPI Redis React Microservice
 
+[![Quality Gate Status](http://localhost:9000/api/project_badges/measure?project=fastapi-redis-react-microservice&metric=alert_status&token=sqb_5633453e0c5c1a40c877a7582613e49d556bb926)](http://localhost:9000/dashboard?id=fastapi-redis-react-microservice) ![Python](https://img.shields.io/badge/python-3.8+-blue?logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115.12-green?logo=fastapi&logoColor=white) ![React](https://img.shields.io/badge/React-18+-blue?logo=react&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-5.3+-red?logo=redis&logoColor=white)
 
+A modern microservices-based e-commerce application demonstrating event-driven architecture with FastAPI, Redis, and React. This project showcases real-world patterns including asynchronous message processing, inventory management, and inter-service communication.
 
-## Getting started
+## 🏗️ Architecture
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+This application follows a microservices architecture with three main components:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/ValentineOO/fastapi-redis-react-microservice.git
-git branch -M main
-git push -uf origin main
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend UI   │    │  Inventory API  │    │  Payment API    │
+│    (React)      │    │   (FastAPI)     │    │   (FastAPI)     │
+│                 │    │                 │    │                 │
+│ • Product List  │◄──►│ • CRUD Products │    │ • Create Orders │
+│ • Order Mgmt    │    │ • Inventory Mgmt│    │ • Process Payments│
+│ • User Interface│    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                │                        │
+                                │    ┌─────────────────┐ │
+                                └───►│ Redis Streams   │◄┘
+                                     │                 │
+                                     │ • Event Queue   │
+                                     │ • Data Storage  │
+                                     │ • Pub/Sub       │
+                                     └─────────────────┘
 ```
 
-## Integrate with your tools
+### Services Overview
 
-- [ ] [Set up project integrations](https://gitlab.com/ValentineOO/fastapi-redis-react-microservice/-/settings/integrations)
+- **Inventory Service** (`inventory/`): Manages product catalog and stock levels
+- **Payment Service** (`payment/`): Handles order processing and payment workflows
+- **Frontend UI** (`inventory-ui/`): React-based user interface
+- **Redis**: Serves as both database and message broker for inter-service communication
 
-## Collaborate with your team
+## ✨ Features
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+- 🔄 **Event-Driven Architecture**: Asynchronous communication using Redis Streams
+- 📦 **Inventory Management**: Real-time stock updates and product management
+- 💰 **Order Processing**: Complete order lifecycle with automatic fee calculation
+- 🔄 **Background Processing**: Async order completion simulation
+- 🔒 **Error Handling**: Automatic refund mechanism for failed inventory updates
+- 🌐 **CORS-Enabled**: Full frontend-backend integration support
+- 🎯 **RESTful APIs**: Clean, well-structured API endpoints
 
-## Test and Deploy
+## 🚀 Quick Start
 
-Use the built-in continuous integration in GitLab.
+### Prerequisites
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- Python 3.8+
+- Node.js 16+
+- Redis Server
+- Git
 
-***
+### Installation & Setup
 
-# Editing this README
+1. **Clone the repository**
+   ```bash
+   git clone https://gitlab.com/ValentineOO/fastapi-redis-react-microservice.git
+   cd fastapi-redis-react-microservice
+   ```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+2. **Set up Redis**
+   ```bash
+   # Using Docker (recommended)
+   docker run -d -p 6379:6379 --name redis redis:latest
+   
+   # Or install locally (Ubuntu/Debian)
+   sudo apt-get install redis-server
+   redis-server
+   ```
 
-## Suggestions for a good README
+3. **Configure Environment Variables**
+   
+   Create `.env.inventory` in the `inventory/` directory:
+   ```env
+   REDIS_HOST=localhost
+   REDIS_PORT=6379
+   REDIS_USERNAME=
+   REDIS_PASSWORD=
+   ```
+   
+   Create `.env.payment` in the `payment/` directory:
+   ```env
+   REDIS_HOST=localhost
+   REDIS_PORT=6379
+   REDIS_USERNAME=
+   REDIS_PASSWORD=
+   PRODUCT_SERVICE_URL=http://localhost:8000
+   ```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+4. **Start the Inventory Service**
+   ```bash
+   cd inventory
+   pip install -r requirements.txt
+   uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+   ```
 
-## Name
-Choose a self-explaining name for your project.
+5. **Start the Payment Service**
+   ```bash
+   cd payment
+   pip install -r requirements.txt
+   uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+   ```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+6. **Start Redis Consumers** (in separate terminals)
+   ```bash
+   # Inventory consumer
+   cd inventory
+   python consumer.py
+   
+   # Payment consumer (if exists)
+   cd payment
+   python consumer.py
+   ```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+7. **Start the Frontend**
+   ```bash
+   cd inventory-ui
+   npm install
+   npm start
+   ```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The application will be available at:
+- Frontend: http://localhost:3000
+- Inventory API: http://localhost:8000
+- Payment API: http://localhost:8001
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## 📚 API Documentation
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Inventory Service (Port 8000)
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| GET | `/products` | List all products | - |
+| POST | `/products` | Create a new product | `{"name": str, "price": float, "quantity": int}` |
+| GET | `/products/{pk}` | Get specific product | - |
+| DELETE | `/products/{pk}` | Delete a product | - |
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+### Payment Service (Port 8001)
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| GET | `/orders/{pk}` | Get order details | - |
+| POST | `/orders` | Create a new order | `{"id": str, "quantity": int}` |
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+### Example API Usage
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+**Create a Product:**
+```bash
+curl -X POST "http://localhost:8000/products" \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Laptop", "price": 999.99, "quantity": 10}'
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+**Place an Order:**
+```bash
+curl -X POST "http://localhost:8001/orders" \
+     -H "Content-Type: application/json" \
+     -d '{"id": "product_id_here", "quantity": 2}'
+```
 
-## License
-For open source projects, say how it is licensed.
+## 🔄 Event Flow
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+1. **Order Creation**: User places order via frontend → Payment service
+2. **Product Validation**: Payment service fetches product from Inventory service
+3. **Order Processing**: Order saved with "pending" status, background task triggered
+4. **Order Completion**: After 5 seconds, order status → "completed"
+5. **Event Publishing**: `order_completed` event published to Redis Stream
+6. **Inventory Update**: Inventory consumer processes event, updates stock
+7. **Error Handling**: If inventory update fails → refund event created
+
+## 🏗️ Data Models
+
+### Product (Inventory Service)
+```python
+{
+    "id": "string",
+    "name": "string",
+    "price": float,
+    "quantity": int
+}
+```
+
+### Order (Payment Service)
+```python
+{
+    "id": "string",
+    "product_id": "string",
+    "price": float,
+    "fee": float,        # 20% of product price
+    "total": float,      # price + fee
+    "quantity": int,
+    "status": "string"   # pending, completed, refunded
+}
+```
+
+## 🛠️ Technology Stack
+
+### Backend
+- **FastAPI**: Modern, fast web framework for Python APIs
+- **Redis**: In-memory data structure store for caching and messaging
+- **Redis-OM**: Object mapping library for Redis
+- **Uvicorn**: ASGI server for Python web applications
+- **Python-dotenv**: Environment variable management
+
+### Frontend
+- **React**: JavaScript library for building user interfaces
+- **Create React App**: Toolchain for React development
+
+### Development & Quality
+- **SonarQube**: Code quality and security analysis
+- **Python typing**: Type hints for better code quality
+
+## 🔧 Development
+
+### Project Structure
+```
+fastapi-redis-react-microservice/
+├── inventory/                 # Inventory microservice
+│   ├── main.py               # FastAPI app and routes
+│   ├── consumer.py           # Redis stream consumer
+│   ├── requirements.txt      # Python dependencies
+│   └── .env.inventory        # Environment variables
+├── payment/                  # Payment microservice
+│   ├── main.py               # FastAPI app and routes
+│   ├── consumer.py           # Redis stream consumer
+│   ├── requirements.txt      # Python dependencies
+│   └── .env.payment          # Environment variables
+├── inventory-ui/             # React frontend
+│   ├── src/
+│   │   ├── components/       # React components
+│   │   └── App.js           # Main app component
+│   └── package.json         # Node.js dependencies
+└── README.md                # This file
+```
+
+### Running Tests
+```bash
+# Backend tests (when implemented)
+cd inventory && python -m pytest
+cd payment && python -m pytest
+
+# Frontend tests
+cd inventory-ui && npm test
+```
+
+### Code Quality
+This project uses SonarQube for code quality analysis. The current quality gate status is shown in the badge above.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+- Follow PEP 8 for Python code
+- Use meaningful commit messages
+- Add tests for new features
+- Update documentation as needed
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Authors
+
+- **Valentine OO** - *Initial work* - [ValentineOO](https://gitlab.com/ValentineOO)
+
+## 🙏 Acknowledgments
+
+- FastAPI community for excellent documentation
+- Redis team for powerful data structures
+- React team for the amazing UI library
+- All contributors who helped improve this project
+
+## 📞 Support
+
+If you have any questions or need help:
+- Create an [issue](https://gitlab.com/ValentineOO/fastapi-redis-react-microservice/-/issues)
+- Check the [documentation](https://gitlab.com/ValentineOO/fastapi-redis-react-microservice)
+- Contact the maintainer
+
+---
+
+⭐ Star this repository if you found it helpful!
